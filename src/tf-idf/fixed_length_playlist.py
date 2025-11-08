@@ -8,10 +8,10 @@ from collections import Counter, defaultdict
 
 # ===경로설정===
 INPUT_FOLDER  = "./data/proceed/filtering_ge40"
-OUTPUT_FOLDER = "./data/proceed/fixed_len_100_mbtiidf"
+OUTPUT_FOLDER = "./data/proceed/fixed_len_60_mbtiidf"
 os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 
-FIX_LEN = 100
+FIX_LEN = 60
 RANDOM_SEED = 42
 random.seed(RANDOM_SEED)
 
@@ -89,9 +89,9 @@ for mb, bag in mbti_bags.items():
         s[t] = tf * idf[t] # tfidf 점수
     score_mbti[mb] = s
 
-# 4) 각 플레이리스트를 100곡으로 고정
-#    - len <= 100: PAD 추가
-#    - len > 100 : (그 MBTI의 score_mbti) 낮은 곡부터 제거
+# 4) 각 플레이리스트를 60곡으로 고정
+#    - len <= 60: PAD 추가
+#    - len > 60 : (그 MBTI의 score_mbti) 낮은 곡부터 제거
 #    동점은 랜덤 셔플 후 정렬로 편향 최소화
 RESULTS = defaultdict(list)  # mbti -> rows
 
@@ -101,7 +101,7 @@ for (mbti, playlist_id, playlist_name, tids) in playlist_rows:
         continue
 
     if len(tids) <= FIX_LEN:
-        # 길이가 모자르면(100개가 안되면) PAD_TOKEN으로 뒤를 채워서 고정 길이를 만든다.
+        # 길이가 모자르면(60개가 안되면) PAD_TOKEN으로 뒤를 채워서 고정 길이를 만든다.
         padded = tids + [PAD_TOKEN] * (FIX_LEN - len(tids))
         RESULTS[mbti].append({
             "mbti": mbti,
@@ -114,7 +114,7 @@ for (mbti, playlist_id, playlist_name, tids) in playlist_rows:
         })
         continue
 
-    # 길이가 100을 초과하는 경우 -> tf-idf 낮은 곡부터 제거(대중적인 곡을 지우는 의미)
+    # 길이가 60을 초과하는 경우 -> tf-idf 낮은 곡부터 제거(대중적인 곡을 지우는 의미)
     sdict = score_mbti.get(mbti, {})
     scored = []
     for t in tids:
@@ -142,8 +142,8 @@ for (mbti, playlist_id, playlist_name, tids) in playlist_rows:
 # 5) MBTI별 CSV 저장
 for mbti, rows in RESULTS.items():
     out_df = pd.DataFrame(rows)
-    out_path = os.path.join(OUTPUT_FOLDER, f"{mbti}_fixed100.csv")
+    out_path = os.path.join(OUTPUT_FOLDER, f"{mbti}_fixed60.csv")
     out_df.to_csv(out_path, index=False, encoding="utf-8-sig")
     print(f"[SAVE] {mbti}: {len(out_df)} playlists → {out_path}")
 
-print("\n✅ Done. Fixed-length=100 using MBTI-doc TF-IDF (trim+pad).")
+print("\n✅ Done. Fixed-length=60 using MBTI-doc TF-IDF (trim+pad).")
