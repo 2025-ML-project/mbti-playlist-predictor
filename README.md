@@ -1,3 +1,5 @@
+## 📁 Project Structure
+```
 mbti-playlist-predictor/
 │
 ├── .github/
@@ -42,6 +44,7 @@ mbti-playlist-predictor/
 │
 ├── .gitignore
 └── README.md
+```
 
 
 # Dual-Input LSTM MBTI Predictor
