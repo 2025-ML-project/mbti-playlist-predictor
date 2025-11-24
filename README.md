@@ -257,9 +257,9 @@ mbti-playlist-predictor/
 # 🧑‍💻 Contributors
 | 이름 | 역할 |
 |------|------|
-| [@whtjsghks](https://github.com/whtjsghks) | 전반적인 모델링 |
-| [@optiprime27](https://github.com/optiprime27) | 데이터 임베딩, 추가적인 모델링 |
-| [@soyeoneeii](https://github.com/soyeoneeii) | 데이터 전처리, 추가적인 모델링 |
-| [@go-wt-flow](https://github.com/go-wt-flow) | 전반적인 모델링 |
+| 조선환 [@whtjsghks](https://github.com/whtjsghks) | 전반적인 모델링 과정 전담|
+| 김예송 [@optiprime27](https://github.com/optiprime27) | 데이터 임베딩, 추가적인 모델링 |
+| 박소연 [@soyeoneeii](https://github.com/soyeoneeii) | 데이터 전처리, 추가적인 모델링 |
+| 정수원 [@go-wt-flow](https://github.com/go-wt-flow) | 전반적인 모델링 과정 전담|
 
 
