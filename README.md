@@ -6,15 +6,15 @@ mbti-playlist-predictor/
 │   │   └── 버그-리포트.md
 │   └── pull_request_template.md
 │
-├── 📂 notebooks/                               # 모델 실험 및 분석 노트북
-│   ├── LSTM+Dual.ipynb                         # LSTM + Dual Input 모델 실험
-│   ├── cnn+base+model.ipynb                    # CNN Base Model
-│   ├── mbti_four_binary_model.ipynb            # 4축 분리(binary) 모델
+├── 📂 notebooks/               # 모델 실험 및 분석 노트북
+│   ├── LSTM+Dual.ipynb         # LSTM + Dual Input 모델 실험
+│   ├── cnn+base+model.ipynb    # CNN Base Model
+│   ├── mbti_four_binary_model.ipynb   # 4축 Binary 모델
 │   ├── mbti_multitask_model_base_final.ipynb   # Multitask CNN 최종 모델
 │   ├── multi_label_test.ipynb
-│   └── weighted_binary_crossentropy.ipynb      # 가중치 적용 손실 실험
+│   └── weighted_binary_crossentropy.ipynb       # 가중치 손실 실험
 │
-├── 📂 src/                                      # 데이터 처리/모델 입력용 스크립트
+├── 📂 src/                     # 데이터 처리 및 전처리 스크립트
 │   ├── tf-idf/
 │   │   └── fixed_length_playlist.py
 │   │
