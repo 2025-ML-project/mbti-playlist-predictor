@@ -23,53 +23,6 @@
 | **Explainability** | SHAP |
 | **Version Control** | Git / GitHub |
 
-# 📁 Project Structure
-```
-mbti-playlist-predictor/
-│
-├── .github/
-│   ├── ISSUE_TEMPLATE/
-│   │   ├── 기능-요청.md
-│   │   └── 버그-리포트.md
-│   └── pull_request_template.md
-│
-├── 📂 notebooks/               # 모델 실험 및 분석 노트북
-│   ├── LSTM+Dual.ipynb         # LSTM + Dual Input 모델 실험
-│   ├── cnn+base+model.ipynb    # CNN Base Model
-│   ├── mbti_four_binary_model.ipynb   # 4축 Binary 모델
-│   ├── mbti_multitask_model_base_final.ipynb   # Multitask CNN 최종 모델
-│   ├── multi_label_test.ipynb
-│   └── weighted_binary_crossentropy.ipynb       # 가중치 손실 실험
-│
-├── 📂 src/                     # 데이터 처리 및 전처리 스크립트
-│   ├── tf-idf/
-│   │   └── fixed_length_playlist.py
-│   │
-│   ├── 데이터가져오기/
-│   │   ├── playlist_track_extract.py
-│   │   └── playlist_track_extract_loop.py
-│   │
-│   ├── 데이터임베딩/
-│   │   ├── error_feature_extractor.py
-│   │   ├── feature_cleaner.py
-│   │   ├── feature_extractor_cache.py
-│   │   ├── playlist_track_extract.py
-│   │   └── tensor_generator.py
-│   │
-│   ├── 데이터필터링/
-│   │   ├── drop_playlist_by_40.py
-│   │   ├── drop_playlist_by_40_save.py
-│   │   └── filtering.py
-│   │
-│   └── 시각화/
-│       ├── playlist_barchart.py
-│       ├── track_count_boxplot.py
-│       ├── visualiise-count.py
-│       └── visualiise-track-count.py
-│
-├── .gitignore
-└── README.md
-```
 
 # 🎵 Model Overview
 총 3가지 모델을 소개하며,
@@ -92,9 +45,13 @@ mbti-playlist-predictor/
 ## [1] CNN Base Model
 > CNN이 곡의 feature sequence를 통해 MBTI 전체를 예측하는 단일 다중분류 모델입니다.
 
+<br>
+
 ### ① Input & Target
 - Input : audio features (n,60,11)
 - Target : MBTI 유형을 하나의 클래스로 취급하여, one-hot-encoding
+
+<br>
 
 ### ② Model Architecture
 #### 1. 모델1 (base model)
@@ -104,6 +61,8 @@ mbti-playlist-predictor/
 #### 5. 모델5 (modified architecture)
 
 CNN Base Model 구축 시에는, 다양한 하이퍼파라미터 조정 및 optimizer 변경의 다양한 실험을 진행하였습니다.
+
+<br>
 
 ### ③ 성능 및 평가
 | 항목                | 설명 |
@@ -115,13 +74,14 @@ CNN Base Model 구축 시에는, 다양한 하이퍼파라미터 조정 및 opti
 
 > 테스트 정확도는 0.365
 
+<br>
 
 ### ④ 한계점 및 분석
 1. cnn base model은 하이퍼파라미터, 모델 구조 개선을 해도 정확도 40%를 넘기지 못했음
 2. 이는 MBTI는 4개의 독립적인 축으로 이루어져있다. → 한 글자라도 틀리면 완전 실패하기 때문
 3. SHAP의 결과인 상위 5개 주요 특성을 조금 더 반영할 수 있도록 모델을 개선하기 위해서 lstm+dual input model을 만들어 보았음
 
-
+<br>
  
 ## [2] Dual-Input LSTM MBTI Predictor
 > 기존 단일 모델의 한계를 극복하기 위해 LSTM과 Dual-Input 구조를 결합한 모델입니다.
@@ -215,17 +175,22 @@ CNN Base Model 구축 시에는, 다양한 하이퍼파라미터 조정 및 opti
 
 <br>
 
-
 ## [3] CNN Multitask Base Model
 > CNN이 곡의 feature sequence를 보고 MBTI 4축(ei/sn/ft/pj) 를 각각 동시에 예측하는 모델입니다.
+
+<br>
 
 ### ① y-labeling
 - y_raw는 하나의 플레이리스트에 대응하는 하나의 full mbti를 가지고 있음
 - multitask 방식을 이용하기 위해서 y의 shape을 (n,4)로 변환
 - (E=1, I=0) / (N=1, S=0) / (T=1, F=0) / (T=1, F=0)
 
+<br>
+
 ### ② Model Architecture
 - Base CNN 모델에서 dense layer의 마지막 output을 4개의 노드를 가지며, sigmoid activation function을 사용
+
+<br>
 
 ### ③ 성능 및 평가
 | 항목 | 의미 |
@@ -237,5 +202,64 @@ CNN Base Model 구축 시에는, 다양한 하이퍼파라미터 조정 및 opti
 
 > 테스트 정확도는 0.744
 
+<br>
+
 # ⭐️ 최종 결론
+
+# 📁 Project Structure
+```text
+mbti-playlist-predictor/
+│
+├── .github/
+│   ├── ISSUE_TEMPLATE/
+│   │   ├── 기능-요청.md
+│   │   └── 버그-리포트.md
+│   └── pull_request_template.md
+│
+├── 📂 notebooks/               # 모델 실험 및 분석 노트북
+│   ├── LSTM+Dual.ipynb         # LSTM + Dual Input 모델 실험
+│   ├── cnn+base+model.ipynb    # CNN Base Model
+│   ├── mbti_four_binary_model.ipynb   # 4축 Binary 모델
+│   ├── mbti_multitask_model_base_final.ipynb   # Multitask CNN 최종 모델
+│   ├── multi_label_test.ipynb
+│   └── weighted_binary_crossentropy.ipynb       # 가중치 손실 실험
+│
+├── 📂 src/                     # 데이터 처리 및 전처리 스크립트
+│   ├── tf-idf/
+│   │   └── fixed_length_playlist.py
+│   │
+│   ├── 데이터가져오기/
+│   │   ├── playlist_track_extract.py
+│   │   └── playlist_track_extract_loop.py
+│   │
+│   ├── 데이터임베딩/
+│   │   ├── error_feature_extractor.py
+│   │   ├── feature_cleaner.py
+│   │   ├── feature_extractor_cache.py
+│   │   ├── playlist_track_extract.py
+│   │   └── tensor_generator.py
+│   │
+│   ├── 데이터필터링/
+│   │   ├── drop_playlist_by_40.py
+│   │   ├── drop_playlist_by_40_save.py
+│   │   └── filtering.py
+│   │
+│   └── 시각화/
+│       ├── playlist_barchart.py
+│       ├── track_count_boxplot.py
+│       ├── visualiise-count.py
+│       └── visualiise-track-count.py
+│
+├── .gitignore
+└── README.md
+```
+
+# 🧑‍💻 Contributors
+| 이름 | 역할 |
+|------|------|
+| [@whtjsghks](https://github.com/whtjsghks) | 전반적인 모델링 |
+| [@optiprime27](https://github.com/optiprime27) | 데이터 임베딩, 추가적인 모델링 |
+| [@soyeoneeii](https://github.com/soyeoneeii) | 데이터 전처리, 추가적인 모델링 |
+| [@go-wt-flow](https://github.com/go-wt-flow) | 전반적인 모델링 |
+
 
