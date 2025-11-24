@@ -1,3 +1,49 @@
+mbti-playlist-predictor/
+│
+├── .github/
+│   ├── ISSUE_TEMPLATE/
+│   │   ├── 기능-요청.md
+│   │   └── 버그-리포트.md
+│   └── pull_request_template.md
+│
+├── 📂 notebooks/                               # 모델 실험 및 분석 노트북
+│   ├── LSTM+Dual.ipynb                         # LSTM + Dual Input 모델 실험
+│   ├── cnn+base+model.ipynb                    # CNN Base Model
+│   ├── mbti_four_binary_model.ipynb            # 4축 분리(binary) 모델
+│   ├── mbti_multitask_model_base_final.ipynb   # Multitask CNN 최종 모델
+│   ├── multi_label_test.ipynb
+│   └── weighted_binary_crossentropy.ipynb      # 가중치 적용 손실 실험
+│
+├── 📂 src/                                      # 데이터 처리/모델 입력용 스크립트
+│   ├── tf-idf/
+│   │   └── fixed_length_playlist.py
+│   │
+│   ├── 데이터가져오기/
+│   │   ├── playlist_track_extract.py
+│   │   └── playlist_track_extract_loop.py
+│   │
+│   ├── 데이터임베딩/
+│   │   ├── error_feature_extractor.py
+│   │   ├── feature_cleaner.py
+│   │   ├── feature_extractor_cache.py
+│   │   ├── playlist_track_extract.py
+│   │   └── tensor_generator.py
+│   │
+│   ├── 데이터필터링/
+│   │   ├── drop_playlist_by_40.py
+│   │   ├── drop_playlist_by_40_save.py
+│   │   └── filtering.py
+│   │
+│   └── 시각화/
+│       ├── playlist_barchart.py
+│       ├── track_count_boxplot.py
+│       ├── visualiise-count.py
+│       └── visualiise-track-count.py
+│
+├── .gitignore
+└── README.md
+
+
 # Dual-Input LSTM MBTI Predictor
 > 기존 단일 모델의 한계를 극복하기 위해 LSTM과 Dual-Input 구조를 결합한 모델입니다.
 
