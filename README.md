@@ -89,15 +89,47 @@ mbti-playlist-predictor/
      **4가지 축(E/I, S/N, T/F, P/J)을 각각 예측**하여  
      예측 성능과 안정성을 크게 높인 모델
 
-## 1. CNN Base Model
+## [1] CNN Base Model
+> CNN이 곡의 feature sequence를 통해 MBTI 전체를 예측하는 단일 다중분류 모델
 
-## 2. Dual-Input LSTM MBTI Predictor
+### ① Input & Target
+- Input : audio features (n,60,11)
+- Target : MBTI 유형을 하나의 클래스로 취급하여, one-hot-encoding
+
+### ② Model Architecture
+#### 1. 모델1 (base model)
+#### 2. 모델2 (base model + Early Stopping 적용)
+#### 3. 모델3 (dropout 비율 조정)
+#### 4. 모델4 (deeper architecture + optimizer=’rmsprop’)
+#### 5. 모델5 (modified architecture)
+
+CNN Base Model 구축 시에는, 다양한 하이퍼파라미터 조정 및 optimizer 변경의 다양한 실험을 진행하였습니다.
+
+### ③ 성능 및 평가
+| 항목                | 설명 |
+|--------------------|------|
+| **Training Loss**       | 계속해서 감소 |
+| **Validation Loss**     | 감소하다가 약 10 epoch 이후 증가 → 과대적합 시작 |
+| **Training Accuracy**   | 계속해서 증가 |
+| **Validation Accuracy** | 증가하다가 일정 수준 이상으로는 올라가지 않음 |
+
+> 테스트 정확도는 0.365
+
+
+### ④ 한계점 및 분석
+1. cnn base model은 하이퍼파라미터, 모델 구조 개선을 해도 정확도 40%를 넘기지 못했다.
+2. 이는 MBTI는 4개의 독립적인 축으로 이루어져있다. → 한 글자라도 틀리면 완전 실패하기 때문이다.
+3. SHAP의 결과인 상위 5개 주요 특성을 조금 더 반영할 수 있도록 모델을 개선하기 위해서 lstm+dual input model을 만들어 보았다.
+
+
+ 
+## [2] Dual-Input LSTM MBTI Predictor
 > 기존 단일 모델의 한계를 극복하기 위해 LSTM과 Dual-Input 구조를 결합한 모델입니다.
 
 <br>
 
-## 1. 기존모델 개선
-### 왜 LSTM + Dual Input인가?
+### ① 기존모델 개선
+#### 왜 LSTM + Dual Input인가?
 기존 모델(CNN)의 성능 한계를 되짚어 보면서, 두 가지 생각을 했습니다.
 1.  순서의 중요성: 플레이리스트는 단순한 집합이 아니라 흐름(Sequence)이 존재합니다.
 2.  종합적 취향: 개별 곡뿐만 아니라 플레이리스트 전체적인 분위기도 중요합니다.
@@ -106,19 +138,18 @@ mbti-playlist-predictor/
 
 <br>
 
-## 2. 모델 구조
+### ② Model Architecture
 두 가지의 입력을 받아 결합하는 Dual-Input 구조
 
 
-
-### Input A: 시퀀스 데이터 (Sequence)
+#### Input A: 시퀀스 데이터 (Sequence)
 * Input: `(60, 10)` 형태의 시계열 데이터 (최근 60곡의 흐름)
 * Architecture:
     * `Conv1D`: 지역적인 음악적 패턴(Local Pattern) 추출
     * `Bidirectional LSTM`: 플레이리스트의 앞뒤 맥락(Context)을 양방향으로 학습
 * Regularization: `BatchNormalization`, `MaxPooling1D`, `Dropout`을 적용하여 과적합 방지
 
-### Input B: 정적 요약 데이터 (Static)
+#### Input B: 정적 요약 데이터 (Static)
 * Input: RandomForest로 추출한 **Top 5 핵심 특성**의 평균값
 * Architecture: 
     * `Dense Layer`: 완전 연결층을 통해 특징을 압축
@@ -126,7 +157,7 @@ mbti-playlist-predictor/
 
 <br>
 
-## 3. 주요 특성 및 전처리
+### ③ 주요 특성 및 전처리
 학습 효율성을 위해 `RandomForestClassifier`를 활용하여 MBTI 예측에 가장 기여도가 높은 Top 5 특성을 추출했습니다. (SHAP 대비 교차 검증 시 속도 개선)
 
 | 순위 | 특성 (Feature) | 설명 |
@@ -141,7 +172,7 @@ mbti-playlist-predictor/
 
 <br>
 
-## 4. 학습 전략
+## 학습 전략
 모델의 일반화 성능을 높이고 과적합을 방지하기 위해 다음과 같은 전략을 사용했습니다.
 
 * Stratified K-Fold: 클래스 불균형을 고려하여 데이터 분포를 유지하며 5-Fold 교차 검증 수행
