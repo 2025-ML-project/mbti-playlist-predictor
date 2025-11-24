@@ -1,4 +1,29 @@
-## 📁 Project Structure
+# 🎧 mbti-playlist-predictor
+
+> Spotify 플레이리스트의 음악적 특성  
+> (tempo, happiness, energy, acousticness 등)을 기반으로  
+> 사용자의 **MBTI 유형 (E/I, S/N, T/F, P/J)** 을 예측하는 머신러닝 프로젝트입니다.
+
+본 프로젝트는 CNN, LSTM, Dual-Input, Multitask 모델 등 다양한 딥러닝 구조를 실험하며
+**“음악 취향과 성격 간의 관계”** 를 탐구하였습니다.
+
+# 🎶 문제정의
+- 아이디어 : 사용자의 음악 취향을 통해 성격적 특성을 예측할 수 있을까?
+- 목표 : 사용자가 즐겨듣는 음악의 특성(audio features)을 통해 MBTI 성격 유형을 에측하는 모델을 구축하기
+
+# 🛠 개발 환경
+
+| 항목 | 내용 |
+|------|------|
+| **OS / Hardware** | Google Colab (GPU T4) |
+| **IDE** | VSCode, Google Colab |
+| **ML Frameworks** | TensorFlow / Keras, Scikit-learn |
+| **Data Processing** | NumPy, Pandas |
+| **Visualization** | Matplotlib, Seaborn |
+| **Explainability** | SHAP |
+| **Version Control** | Git / GitHub |
+
+# 📁 Project Structure
 ```
 mbti-playlist-predictor/
 │
@@ -46,8 +71,27 @@ mbti-playlist-predictor/
 └── README.md
 ```
 
+# 🎵 Model Overview
+총 3가지 모델을 소개하며,
+1 → 2 → 3 모델의 순서대로 앞선 모델의 한계점을 해결할 수 있도록 단계적으로 모델을 구축하였습니다.
 
-# Dual-Input LSTM MBTI Predictor
+1. **CNN Base Model**  
+   - 곡 시퀀스(sequence)를 1D convolution으로 처리하여  
+     MBTI *전체 16개 유형*을 한 번에 분류하는 모델
+     
+2. **LSTM + Dual Input Model**  
+   - 플레이리스트의 흐름(sequence)을 LSTM으로 읽고  
+   - SHAP 기반 Top-5 핵심 특성의 *평균값*을 별도 입력으로 넣어  
+     두 정보를 결합하여 예측하는 모델
+
+3. **Multitask CNN Model — 최종 선정 모델**  
+   - MBTI를 16개를 한 번에 맞추는 대신  
+     **4가지 축(E/I, S/N, T/F, P/J)을 각각 예측**하여  
+     예측 성능과 안정성을 크게 높인 모델
+
+## 1. CNN Base Model
+
+## 2. Dual-Input LSTM MBTI Predictor
 > 기존 단일 모델의 한계를 극복하기 위해 LSTM과 Dual-Input 구조를 결합한 모델입니다.
 
 <br>
